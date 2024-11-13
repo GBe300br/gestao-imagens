@@ -1,0 +1,57 @@
+name: Build and Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and Test Frontend
+        run: |
+          cd frontend
+          docker build -t my-frontend .
+          docker run -d -p 3000:3000 my-frontend
+          # Adicione os testes do frontend aqui, se necessário.
+
+  build_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and Test Backend
+        run: |
+          cd backend
+          docker build -t my-backend .
+          docker run -d -p 5000:5000 my-backend
+          # Adicione os testes do backend aqui, se necessário.
+
+  build_postgresql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and Test PostgreSQL
+        run: |
+          docker build -t my-postgresql .
+          docker run -d -p 5432:5432 my-postgresql
+          # Adicione os testes para o PostgreSQL aqui, se necessário.
